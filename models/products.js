@@ -48,8 +48,9 @@ const Product = sequelize.define("products", {
       notNull: {
         msg: "type of product is required",
       },
-      validate: {
-        isIn: [["libs", "eyes", "face"]],
+      isIn: {
+        args: [["libs", "eyes", "face"]],
+        msg: "Invalid type of product",
       },
       notEmpty: {
         msg: "type of product cannot be empty",
@@ -64,16 +65,6 @@ const Product = sequelize.define("products", {
 
   imghover: {
     type: DataTypes.STRING,
-    allowNull: false,
-  },
-
-  createdAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-
-  updatedAt: {
-    type: DataTypes.DATE,
     allowNull: false,
   },
 });
