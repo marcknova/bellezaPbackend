@@ -59,8 +59,8 @@ const Product = sequelize.define("products", {
   },
 
   img: {
-    type: DataTypes.STRING,
     allowNull: false,
+    type: DataTypes.STRING,
   },
 
   imghover: {

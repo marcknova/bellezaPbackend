@@ -19,9 +19,12 @@
 
 const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize("shopping_app", "postgres", "12345", {
-  host: "localhost",
+const sequelize = new Sequelize({
   dialect: "postgres",
+  database: "shopping",
+  username: "postgres",
+  password: "12345",
+  host: "localhost",
 });
 
 const dbConnectMysql = async () => {
