@@ -1,8 +1,8 @@
-const Product = require("../models/products");
+const Products = require("../models/products");
 
 const createProductWithImage = (fileName, productData) => {
   return new Promise((resolve, reject) => {
-    Product.create({
+    Products.create({
       name: productData.name,
       price: productData.price,
       description: productData.description,
