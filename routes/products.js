@@ -3,7 +3,6 @@ const router = express.Router();
 const Product = require("../models/products");
 const { Op } = require("sequelize");
 
-// GET all products
 router.get("/", async (req, res) => {
   try {
     const products = await Product.findAll({ order: [["createdAt", "DESC"]] });
@@ -13,22 +12,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET a single product by ID
-// router.get("/:id", async (req, res) => {
-//   const productId = req.params.id;
-//   try {
-//     const product = await Product.findByPk(productId);
-//     if (product) {
-//       res.json(product);
-//     } else {
-//       res.status(404).json({ error: "Product not found" });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// });
-
-// Get a single item by type
 router.get("/:type", async (req, res) => {
   const { type } = req.params;
 
