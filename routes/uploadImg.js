@@ -2,9 +2,13 @@ const express = require("express");
 const router = express.Router();
 const uploadImage = require("../middleware/uploadFiles");
 const createProductWithImage = require("./createProducts");
+const authorizationMiddleware = require("../middleware/authorizationMiddleware");
+const decodeTokenMiddleware = require("../middleware/DecodeTokenMiddleware");
 
 router.post(
   "/",
+  decodeTokenMiddleware,
+  authorizationMiddleware("admin"),
   uploadImage([
     { name: "img", maxCount: 1 },
     { name: "imghover", maxCount: 1 },

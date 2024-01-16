@@ -2,11 +2,12 @@ const express = require("express");
 const router = express.Router();
 const Users = require("../models/users");
 const { checkUserExistence } = require("../middleware/authMiddleware");
+const authorizationMiddleware = require("../middleware/authorizationMiddleware");
+const checkUserRole = require("../middleware/checkUserRole");
 
 router.get("/", async (req, res) => {
   try {
     const users = await Users.findAll();
-    console.log(users);
     res.json(users);
   } catch (err) {
     console.error(err);
@@ -15,11 +16,23 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", checkUserExistence, async (req, res) => {
-  const { username, password, email } = req.body;
+  const { username, password, email, role } = req.body;
+
+  const validRoles = ["user", "admin"];
+  const defaultRole = "user";
+
+  const userRole = validRoles.includes(role) ? role : defaultRole;
 
   try {
-    const newUser = await Users.create({ username, password, email });
+    const newUser = await Users.create({
+      username,
+      password,
+      email,
+      role: userRole,
+    });
+
     res.json(newUser);
+
     console.log("User created");
   } catch (err) {
     console.error(err);
@@ -27,7 +40,7 @@ router.post("/", checkUserExistence, async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", authorizationMiddleware("admin"), async (req, res) => {
   const userId = req.params.id;
   const { username, password, email } = req.body;
 
@@ -44,7 +57,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authorizationMiddleware("admin"), async (req, res) => {
   const userId = req.params.id;
   try {
     const user = await Users.findByPk(userId);

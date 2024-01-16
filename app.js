@@ -1,10 +1,26 @@
-require("dotenv").config;
 const express = require("express");
-const cors = require("cors");
-const { dbConnectMysql } = require("./connection/db");
 const app = express();
+require("dotenv").config();
+const cors = require("cors");
+
+const { dbConnectMysql } = require("./connection/db");
+const session = require("express-session");
+const passport = require("./utils/passport-config");
 
 const PORT = 3001;
+
+app.use(passport.initialize());
+
+// Configuración de Express y Passport
+app.use(
+  session({
+    secret: process.env.SECRET_KEY_LOGIN,
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+
+app.use(passport.session());
 
 app.use(cors());
 app.use(express.json());
