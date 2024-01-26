@@ -2,12 +2,23 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 const cors = require("cors");
-
+const bodyParser = require("body-parser");
 const { dbConnectMysql } = require("./connection/db");
 const session = require("express-session");
 const passport = require("./utils/passport-config");
 
 const PORT = 3001;
+const allowedOrigin = "http://localhost:5173";
+
+app.use(bodyParser.json({ limit: "50mb" }));
+
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+    limit: "35mb",
+    parameterLimit: 50000,
+  })
+);
 
 app.use(passport.initialize());
 
@@ -22,7 +33,12 @@ app.use(
 
 app.use(passport.session());
 
-app.use(cors());
+app.use(
+  cors({
+    origin: allowedOrigin,
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.static("storage"));
 

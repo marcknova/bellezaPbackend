@@ -15,12 +15,20 @@ router.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
-    res.redirect("/perfil");
+    res.redirect("http://localhost:5173/bellezaProject/google-profile");
+    // res.redirect("/api/auth-routes/perfil");
   }
 );
 
 router.get("/perfil", (req, res) => {
-  res.send(req.isAuthenticated() ? req.user : "No autenticado");
+  console.log("Is Authenticated:", req.isAuthenticated());
+
+  if (req.isAuthenticated()) {
+    res.header("Access-Control-Allow-Credentials", true);
+    res.send(req.user);
+  } else {
+    res.send("No autenticado");
+  }
 });
 
 router.get("/logout", (req, res) => {
